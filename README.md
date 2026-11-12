@@ -29,3 +29,11 @@
 - 修改已分发的插件后保持插件 ID 和服务 ID 稳定，提高 `manifest.json` 中的三段版本号。先在「接口插件」中更新模板，再在「服务配置」中升级实例并测试。现有实例使用各自保存的快照。
 
 代码源自[官方 OpenAI 兼容插件](https://github.com/fishjar/kiss-translator-plugins/tree/f985236bef25a110832bf004fd68dc65ced5e79b/plugins/openai-compatible-bundle)，采用 [MIT 许可证](LICENSE)。
+
+## 提示词规则与测试
+
+原始系统和用户模板都为空（缺失、null、空字符串或纯空白）时使用完整默认模板：有效选定预设优先，其次插件预设，再次宿主任务默认模板。只填一边时，另一边保持空，不自动补原文、术语或语气。自定义模板展开后均为空则报错，不再回退。占位符只展开一次。SDK 直接调用保留空模板对默认行为，属于 Plugin API 1；运行时回退不覆盖已有实例配置。
+
+单句和词典使用 `{{text}}`，批量使用 `{{segments}}`，术语使用 `{{glossary}}`。能力测试复用相同规则；字幕 JSON、聊天 messages 和图片继续遵循固定协议。
+
+安装相邻宿主及官方插件仓库依赖后运行 `node --test tests/prompts.test.cjs`。可用 `KISS_TRANSLATOR_ROOT` 和 `KISS_TRANSLATOR_PLUGINS_ROOT` 指定位置。测试使用真实宿主、SDK 和执行器，只模拟 HTTP。
