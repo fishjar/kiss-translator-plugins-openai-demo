@@ -29,3 +29,11 @@ Each instance can use a different compatible provider and model. Check which end
 - When updating a distributed plugin, keep the plugin and service IDs stable and increment the three-part version in `manifest.json`. Update the template in **Provider Plugins**, then upgrade and test your service instances in **Service Configuration**. Existing instances use their saved snapshots.
 
 Adapted from the [official OpenAI-compatible plugin](https://github.com/fishjar/kiss-translator-plugins/tree/f985236bef25a110832bf004fd68dc65ced5e79b/plugins/openai-compatible-bundle) under the [MIT license](LICENSE).
+
+## Prompt rules and tests
+
+When both raw system and user templates are blank (missing, null, empty or whitespace), the host uses a complete default pair: the selected valid preset, then plugin defaults, then host task defaults. If either template has content, the other stays empty; source text, glossary and tone are never appended implicitly. Custom templates that render entirely blank fail instead of falling back. Rendering runs once. SDK calls retain empty-pair defaults under Plugin API 1, without overwriting saved configuration.
+
+Use `{{text}}` for single translation and dictionary input, `{{segments}}` for batches and `{{glossary}}` for terminology. Capability tests follow the same rules. Subtitle JSON, chat messages and image inputs keep their task protocols.
+
+With adjacent host and official plugin dependencies installed, run `node --test tests/prompts.test.cjs`. Override paths with `KISS_TRANSLATOR_ROOT` and `KISS_TRANSLATOR_PLUGINS_ROOT`. Tests use the real host, SDK and executor with mocked HTTP.
