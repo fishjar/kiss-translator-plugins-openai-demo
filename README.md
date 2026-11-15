@@ -37,3 +37,5 @@
 单句和词典使用 `{{text}}`，批量使用 `{{segments}}`，术语使用 `{{glossary}}`。能力测试复用相同规则；字幕 JSON、聊天 messages 和图片继续遵循固定协议。
 
 安装相邻宿主及官方插件仓库依赖后运行 `node --test tests/prompts.test.cjs`。可用 `KISS_TRANSLATOR_ROOT` 和 `KISS_TRANSLATOR_PLUGINS_ROOT` 指定位置。测试使用真实宿主、SDK 和执行器，只模拟 HTTP。
+
+VLM 默认使用「纯文本识别」：合并段内视觉折行，以空行区分真实段落，保留标题、列表、表格、代码和诗歌的结构换行。「文档转 Markdown」为独立可选项。已有实例需升级服务快照；自定义提示词和显式选择的预设保持有效。
