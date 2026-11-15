@@ -37,3 +37,5 @@ When both raw system and user templates are blank (missing, null, empty or white
 Use `{{text}}` for single translation and dictionary input, `{{segments}}` for batches and `{{glossary}}` for terminology. Capability tests follow the same rules. Subtitle JSON, chat messages and image inputs keep their task protocols.
 
 With adjacent host and official plugin dependencies installed, run `node --test tests/prompts.test.cjs`. Override paths with `KISS_TRANSLATOR_ROOT` and `KISS_TRANSLATOR_PLUGINS_ROOT`. Tests use the real host, SDK and executor with mocked HTTP.
+
+VLM defaults to Plain text recognition: visual wraps within prose paragraphs are merged, genuine paragraphs are separated by blank lines, and structural breaks in headings, lists, tables, code, and poetry are preserved. Document to Markdown remains a separate option. Upgrade existing service snapshots to obtain the new presets; custom prompts and explicitly selected presets remain effective.

@@ -11,6 +11,7 @@ const { load } = require(path.join(pluginsRoot, "tests/support/host.cjs"));
 const { withDefaultPromptInput } = load("providers/defaultPrompts.js");
 const manifest = require("../manifest.json");
 const root = path.resolve(__dirname, "..");
+require(path.join(pluginsRoot, "tests/support/vlm-defaults.cjs"))(root, "vision");
 test("demo templates use supported placeholders and declare their input", () => {
   const supported = new Set([
     "title",
