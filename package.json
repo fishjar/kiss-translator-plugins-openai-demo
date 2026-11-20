@@ -1,0 +1,8 @@
+{
+  "name": "kiss-translator-plugins-openai-demo",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "fflate": "0.8.3"
+  }
+}
