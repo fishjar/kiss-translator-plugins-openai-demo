@@ -24,6 +24,8 @@
 
 ## 目录与更新
 
+升版合并到 `main` 后，Actions 会把安装包发布到 [GitHub Releases](https://github.com/fishjar/kiss-translator-plugins-openai-demo/releases)。可下载 `openai-compatible-demo-<版本>.zip`，解压后导入包含 `manifest.json` 的目录，也可在接口插件页面粘贴该附件的 HTTPS 下载地址。
+
 - `manifest.json` 声明配置、能力、提示词和实现入口。`services/chat.js` 与 `services/vision.js` 演示脚本及宿主 SDK，两个音频 JSON 文件演示声明式 HTTP。
 - GitHub 安装读取公开仓库默认分支的提交归档。Manifest、入口和资源已就绪，导入前无需构建。将示例改作自己的插件时，请换用独立的插件 ID 和名称。
 - 修改已分发的插件后保持插件 ID 和服务 ID 稳定，提高 `manifest.json` 中的三段版本号。先在「接口插件」中更新模板，再在「服务配置」中升级实例并测试。现有实例使用各自保存的快照。

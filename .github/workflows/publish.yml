@@ -1,0 +1,56 @@
+name: Validate and publish plugin ZIP
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: plugin-zip-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.zip.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build the plugin ZIP
+        id: zip
+        run: |
+          version=$(python3 scripts/package-plugin.py "$RUNNER_TEMP")
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: openai-compatible-demo-${{ steps.zip.outputs.version }}
+          path: ${{ runner.temp }}/openai-compatible-demo-${{ steps.zip.outputs.version }}.zip
+          if-no-files-found: error
+
+  publish:
+    if: github.ref == 'refs/heads/main' && needs.package.outputs.version != '1.0.1'
+    needs: package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/download-artifact@v4
+        with:
+          name: openai-compatible-demo-${{ needs.package.outputs.version }}
+          path: ${{ runner.temp }}
+      - name: Publish the plugin ZIP to GitHub Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PLUGIN_VERSION: ${{ needs.package.outputs.version }}
+        run: |
+          node <<'NODE'
+          const { join } = require("node:path");
+          const { publishReleases } = require("./scripts/publish-release.cjs");
+          const { PLUGIN_VERSION: version, RUNNER_TEMP: temp } = process.env;
+          const file = join(temp, `openai-compatible-demo-${version}.zip`);
+          publishReleases([{ tag: `v${version}`, file }], { latest: true });
+          NODE
