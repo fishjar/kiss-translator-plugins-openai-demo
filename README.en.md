@@ -24,6 +24,8 @@ Each instance can use a different compatible provider and model. Check which end
 
 ## Source and updates
 
+When a version bump is merged into `main`, Actions publishes the installation package to [GitHub Releases](https://github.com/fishjar/kiss-translator-plugins-openai-demo/releases). Download `openai-compatible-demo-<version>.zip` and extract it for folder import, or paste the asset's HTTPS download URL into **Provider Plugins**.
+
 - `manifest.json` declares settings, capabilities, prompts, and entry points. `services/chat.js` and `services/vision.js` demonstrate scripts and the host SDK. The two audio JSON files demonstrate declarative HTTP.
 - GitHub installation reads the public repository's default-branch commit archive. The manifest, entry points, and assets are ready to import as checked in. Give your plugin its own ID and name when adapting this demo.
 - When updating a distributed plugin, keep the plugin and service IDs stable and increment the three-part version in `manifest.json`. Update the template in **Provider Plugins**, then upgrade and test your service instances in **Service Configuration**. Existing instances use their saved snapshots.
